@@ -35,7 +35,8 @@ public class CharsetConstants {
         LANGUAGE_US("US-ASCII"),
         LANGUAGE_PT_BR("ISO-8859-1"),
         LANGUAGE_THAI("TIS620"),
-        LANGUAGE_KOREAN("MS949");
+        LANGUAGE_KOREAN("MS949"),
+        LANGUAGE_CN("GBK");
 
         private final String charset;
 
@@ -48,9 +49,7 @@ public class CharsetConstants {
         }
 
         public static Language fromCharset(String charset) {
-            Optional<Language> language = Arrays.stream(values())
-                    .filter(l -> l.charset.equals(charset))
-                    .findAny();
+            Optional<Language> language = Arrays.stream(values()).filter(l -> l.charset.equals(charset)).findAny();
             if (language.isEmpty()) {
                 log.warn("Charset {} was not found, defaulting to US-ASCII", charset);
                 return LANGUAGE_US;
@@ -62,7 +61,7 @@ public class CharsetConstants {
 
     private static String loadCharsetFromConfig() {
         try {
-            YamlReader reader = new YamlReader(Files.newBufferedReader(Path.of(YamlConfig.CONFIG_FILE_NAME), StandardCharsets.US_ASCII));
+            YamlReader reader = new YamlReader(Files.newBufferedReader(Path.of(YamlConfig.CONFIG_FILE_NAME), StandardCharsets.UTF_8));
             reader.getConfig().readConfig.setIgnoreUnknownProperties(true);
             StrippedYamlConfig charsetConfig = reader.read(StrippedYamlConfig.class);
             reader.close();

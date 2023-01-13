@@ -41,6 +41,7 @@ import constants.id.MapId;
 import constants.id.MobId;
 import constants.inventory.ItemConstants;
 import constants.skills.*;
+import constants.string.CharsetConstants;
 import net.packet.Packet;
 import net.server.PlayerBuffValueHolder;
 import net.server.PlayerCoolDownValueHolder;
@@ -90,7 +91,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static java.util.concurrent.TimeUnit.*;
@@ -887,7 +887,8 @@ public class Character extends AbstractCharacterObject {
                 return false;
             }
         }
-        return getIdByName(name) < 0 && Pattern.compile("[a-zA-Z0-9]{3,12}").matcher(name).matches();
+        byte[] bytes = name.getBytes(CharsetConstants.CHARSET);
+        return getIdByName(name) < 0 && bytes.length < 12;
     }
 
     public boolean canDoor() {
